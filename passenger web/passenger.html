@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Passenger Page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #2196F3 0%, #4CAF50 100%);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(44, 62, 80, 0.15);
+      padding: 40px 32px 32px 32px;
+      width: 370px;
+      max-width: 95vw;
+      margin: 0 auto;
+      text-align: center;
+      animation: fadeIn 0.7s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    h2 {
+      color: #4CAF50;
+      font-weight: 700;
+      margin-bottom: 18px;
+      letter-spacing: 1px;
+    }
+    .info {
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 18px;
+      margin: 18px 0;
+      color: #333;
+      font-size: 1.05em;
+      text-align: left;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.05);
+    }
+    select, button {
+      width: 80%;
+      padding: 12px;
+      margin: 12px auto;
+      border-radius: 8px;
+      border: none;
+      font-size: 1.1em;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+      transition: background 0.2s;
+      display: block;
+    }
+    select {
+      background: #f5f5f5;
+      color: #333;
+      font-weight: 500;
+    }
+    button {
+      background: linear-gradient(90deg, #4CAF50 60%, #2196F3 100%);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #2196F3 60%, #4CAF50 100%);
+    }
+    #busStatus {
+      color: #2196F3;
+      font-weight: 500;
+      margin-top: 10px;
+      min-height: 24px;
+    }
+    #map {
+      margin: 18px auto 0 auto;
+      width: 100%;
+      height: 200px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+      display: none;
+    }
+    @media (max-width: 500px) {
+      .card { width: 98vw; padding: 18px; }
+      #map { height: 150px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2><i class="fa-solid fa-bus"></i> Passenger Page</h2>
+    <div class="info">
+      <strong>Track your bus in real time!</strong><br>
+      Select your stop and click below to get the current bus location and ETA.
+    </div>
+    <select id="stopSelect">
+      <option value="">-- Choose your stop --</option>
+      <option value="13.08698,80.28763">High Court</option>
+      <option value="13.0800,80.2767">MGR Central Station / Govt. General Hospital</option>
+      <option value="13.0805,80.2790">Park Station</option>
+      <option value="13.0810,80.2785">Hotel Everest</option>
+      <option value="13.0820,80.2775">Thinathanthi</option>
+      <option value="13.0830,80.2765">Dasaprakash</option>
+      <option value="13.0840,80.2750">Sangam Theatre</option>
+      <option value="13.0850,80.2740">KMC Hospital</option>
+      <option value="13.0860,80.2730">Taylors Road</option>
+      <option value="13.0741,80.2326">Pachaiyappa’s College</option>
+    </select>
+    <button onclick="getBusLocation()"><i class="fa-solid fa-location-dot"></i> Get Bus Location & ETA</button>
+    <div id="busStatus"></div>
+    <iframe id="map" frameborder="0"></iframe>
+  </div>
+  <script>
+    function getDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; // km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) ** 2 +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) ** 2;
+      return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+    }
+
+    async function getBusLocation() {
+      const stopVal = document.getElementById("stopSelect").value;
+      if (!stopVal) {
+        document.getElementById("busStatus").innerText = "Please select a stop.";
+        document.getElementById("map").style.display = "none";
+        return;
+      }
+      document.getElementById("busStatus").innerText = "Fetching bus location...";
+      try {
+        const res = await fetch("http://localhost:5000/getBusLocation");
+        const data = await res.json();
+        if (data.latitude && data.longitude) {
+          const [stopLat, stopLon] = stopVal.split(',').map(Number);
+          const dist = getDistance(data.latitude, data.longitude, stopLat, stopLon);
+          const eta = Math.round((dist / 30) * 60); // Assuming 30km/h
+          document.getElementById("busStatus").innerHTML =
+            `<strong>Bus:</strong> ${data.driverId}<br>
+             <strong>Latitude:</strong> ${data.latitude}<br>
+             <strong>Longitude:</strong> ${data.longitude}<br>
+             <strong>ETA to stop:</strong> ${eta} min(s)`;
+
+          // Show map
+          const mapUrl = `https://maps.google.com/maps?q=${data.latitude},${data.longitude}&z=15&output=embed`;
+          document.getElementById("map").src = mapUrl;
+          document.getElementById("map").style.display = "block";
+        } else {
+          document.getElementById("busStatus").innerText = "No active bus location available.";
+          document.getElementById("map").style.display = "none";
+        }
+      } catch (e) {
+        document.getElementById("busStatus").innerText = "Error fetching location.";
+        document.getElementById("map").style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>

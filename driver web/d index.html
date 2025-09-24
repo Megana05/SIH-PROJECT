@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Driver Web</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #4CAF50 0%, #2196F3 100%);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(44, 62, 80, 0.15);
+      padding: 40px 32px 32px 32px;
+      width: 350px;
+      max-width: 90vw;
+      margin: 0 auto;
+      transition: box-shadow 0.3s;
+      position: relative;
+      animation: fadeIn 0.7s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    h2 {
+      margin-top: 0;
+      color: #2196F3;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    input[type="text"], input[type="password"] {
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: border 0.2s;
+    }
+    input:focus {
+      border: 1.5px solid #2196F3;
+      outline: none;
+    }
+    button {
+      width: 90%;
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(90deg, #4CAF50 60%, #2196F3 100%);
+      color: #fff;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #2196F3 60%, #4CAF50 100%);
+    }
+    #profileInfo {
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+      color: #333;
+      font-size: 1.05em;
+      text-align: left;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.05);
+    }
+    #options button {
+      width: 80%;
+      margin: 10px auto;
+      display: block;
+      font-size: 1.1em;
+      position: relative;
+    }
+    #options button i {
+      margin-right: 8px;
+    }
+    #status {
+      color: #4CAF50;
+      font-weight: 500;
+      margin-top: 10px;
+      min-height: 24px;
+    }
+    #sos {
+      background: #fff;
+      border-radius: 14px;
+      padding: 24px;
+      margin: 20px auto;
+      width: 320px;
+      box-shadow: 0 4px 16px rgba(44, 62, 80, 0.12);
+      animation: fadeIn 0.5s;
+    }
+    #sos h3 {
+      margin-top: 0;
+      color: #e53935;
+      font-weight: 700;
+      font-size: 1.2em;
+    }
+    .sos-num {
+      font-weight: bold;
+      color: #e53935;
+      margin-right: 8px;
+    }
+    .sos-row {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      font-size: 1.08em;
+    }
+    .sos-row i {
+      margin-right: 10px;
+      color: #e53935;
+      font-size: 1.2em;
+    }
+    #loginStatus {
+      color: #e53935;
+      font-size: 0.98em;
+      margin-top: 8px;
+      min-height: 20px;
+    }
+    @media (max-width: 500px) {
+      .card, #sos { width: 98vw; padding: 18px; }
+      body { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="welcome" class="card">
+    <h2><i class="fa-solid fa-bus"></i> Welcome, Driver!</h2>
+    <p style="color:#555;">Ready to start your journey?</p>
+    <button onclick="showLogin()"><i class="fa-solid fa-arrow-right"></i> Get Started</button>
+  </div>
+
+  <div id="login" class="card" style="display:none;">
+    <h2><i class="fa-solid fa-user"></i> Driver Login</h2>
+    <input type="text" id="driverId" placeholder="Enter Driver ID">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()"><i class="fa-solid fa-sign-in-alt"></i> Login</button>
+    <p id="loginStatus"></p>
+  </div>
+
+  <div id="profile" class="card" style="display:none;">
+    <h2><i class="fa-solid fa-id-card"></i> Profile</h2>
+    <div id="profileInfo"></div>
+    <button onclick="showOptions()"><i class="fa-solid fa-arrow-right"></i> Continue</button>
+  </div>
+
+  <div id="options" class="card" style="display:none;">
+    <h2><i class="fa-solid fa-route"></i> Trip Options</h2>
+    <button onclick="startTrip()"><i class="fa-solid fa-play"></i> Start Trip</button>
+    <button onclick="endTrip()"><i class="fa-solid fa-stop"></i> End Trip</button>
+    <button onclick="showSOS()"><i class="fa-solid fa-triangle-exclamation"></i> SOS</button>
+    <div id="status"></div>
+  </div>
+
+  <div id="sos" style="display:none;">
+    <h3><i class="fa-solid fa-triangle-exclamation"></i> Emergency Numbers</h3>
+    <div class="sos-row"><i class="fa-solid fa-shield-halved"></i> <span class="sos-num">Police:</span> 100</div>
+    <div class="sos-row"><i class="fa-solid fa-truck-medical"></i> <span class="sos-num">Ambulance:</span> 108</div>
+    <div class="sos-row"><i class="fa-solid fa-fire-extinguisher"></i> <span class="sos-num">Fire:</span> 101</div>
+    <button onclick="hideSOS()"><i class="fa-solid fa-xmark"></i> Close</button>
+  </div>
+
+  <script>
+    // UI navigation
+    function showLogin() {
+      document.getElementById('welcome').style.display = 'none';
+      document.getElementById('login').style.display = 'block';
+    }
+
+    function login() {
+      const driverId = document.getElementById("driverId").value;
+      const password = document.getElementById("password").value;
+      if (!driverId || !password) {
+        document.getElementById("loginStatus").innerText = "Enter Driver ID and Password";
+        return;
+      }
+      // Simulate login success
+      document.getElementById("login").style.display = "none";
+      document.getElementById("profile").style.display = "block";
+      document.getElementById("profileInfo").innerHTML =
+        `<strong>Driver ID:</strong> ${driverId}<br>
+         <strong>Name:</strong> John Doe<br>
+         <strong>Vehicle:</strong> TN01AB1234`;
+    }
+
+    function showOptions() {
+      document.getElementById("profile").style.display = "none";
+      document.getElementById("options").style.display = "block";
+    }
+
+    function showSOS() {
+      document.getElementById("sos").style.display = "block";
+    }
+
+    function hideSOS() {
+      document.getElementById("sos").style.display = "none";
+    }
+
+    // Trip logic
+    let tripInterval = null;
+    const route = [
+      { lat: 13.08698, lon: 80.28763 }, // High Court
+      { lat: 13.0800, lon: 80.2800 },   // MGR Central Station
+      { lat: 13.0805, lon: 80.2790 },   // Park Station
+      { lat: 13.0810, lon: 80.2785 },   // Hotel Everest
+      { lat: 13.0820, lon: 80.2775 },   // Thinathanthi
+      { lat: 13.0830, lon: 80.2765 },   // Dasaprakash
+      { lat: 13.0840, lon: 80.2750 },   // Sangam Theatre
+      { lat: 13.0850, lon: 80.2740 },   // KMC Hospital
+      { lat: 13.0860, lon: 80.2730 },   // Taylors Road
+      { lat: 13.0741, lon: 80.2326 },   // Pachaiyappa’s College  
+    ];
+    let routeIndex = 0;
+
+    function startTrip() {
+      const driverId = document.getElementById("driverId").value;
+      if (!driverId) {
+        document.getElementById("status").innerText = "Driver ID missing!";
+        return;
+      }
+      document.getElementById("status").innerText = "Trip started. Sending location...";
+      if (tripInterval) return; // Prevent multiple intervals
+
+      tripInterval = setInterval(() => {
+        const data = { driverId, latitude: route[routeIndex].lat, longitude: route[routeIndex].lon };
+        fetch("http://localhost:5000/updateLocation", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        routeIndex = (routeIndex + 1) % route.length;
+      }, 5000);
+    }
+
+    function endTrip() {
+      if (tripInterval) {
+        clearInterval(tripInterval);
+        tripInterval = null;
+        document.getElementById("status").innerText = "Trip ended. Location sharing stopped.";
+      }
+    }
+
+    // Initial UI state
+    document.getElementById('welcome').style.display = 'block';
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('profile').style.display = 'none';
+    document.getElementById('options').style.display = 'none';
+    document.getElementById('sos').style.display = 'none';
+  </script>
+</body>
+</html>
