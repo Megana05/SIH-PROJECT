@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>CHALTE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <style>
+    body {
+      font-family:'Segoe UI',Arial,sans-serif;
+      background:#6cc5b3; /* teal background */
+      min-height:100vh;
+      margin:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .card {
+      background:#c5edef; /* aqua card */
+      border-radius:18px;
+      padding:40px;
+      width:380px;
+      max-width:94vw;
+      text-align:center;
+      box-shadow:0 8px 32px rgba(0,0,0,.18);
+    }
+    .logo img {
+      max-width:150px;
+      margin-bottom:12px;
+    }
+    h1 {
+      color:#075a5a;
+      margin:10px 0 24px;
+      font-size:1.6rem;
+      font-weight:700;
+      letter-spacing:1px;
+    }
+    a {
+      display:block;
+      margin:14px auto;
+      padding:14px;
+      width:85%;
+      background:#10929e; /* teal button */
+      color:#fff;
+      text-decoration:none;
+      border-radius:8px;
+      font-weight:700;
+      transition:0.3s;
+    }
+    a:hover {
+      background:#34495e; /* hover */
+    }
+    @media(max-width:500px){
+      .card{width:96vw;padding:20px}
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <img src="chalte logo.png" alt="CHALTE Logo">
+    </div>
+    <h1>CHALTE</h1>
+    <a href="driver.html"><i class="fa-solid fa-id-badge"></i> Driver Login</a>
+    <a href="passenger.html"><i class="fa-solid fa-users"></i> Passenger</a>
+  </div>
+</body>
+</html>
