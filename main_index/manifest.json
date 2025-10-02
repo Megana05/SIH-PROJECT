@@ -1,0 +1,22 @@
+{
+  "name": "Chalte Bus Tracker",
+  "short_name": "Chalte",
+  "start_url": "/main_index/label.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#075a5a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/main_index/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/main_index/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

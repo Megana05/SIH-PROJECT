@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CHALTE</title>
+
+  <!-- Manifest lives in the same folder -->
+  <link rel="manifest" href="/main_index/manifest.json" />
+  <meta name="theme-color" content="#075a5a" />
+
+  <!-- Icons: use absolute paths from the root -->
+  <link rel="icon" type="image/png" sizes="192x192" href="/main_index/icons/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/main_index/icons/icon-512.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="/main_index/icons/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="/main_index/icons/icon-512.png" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <style>
+    /* ...your styles... */
+  </style>
+</head>
+  <style>
+    body { font-family:'Segoe UI',Arial,sans-serif; background:#6cc5b3; min-height:100vh; margin:0; display:flex; align-items:center; justify-content:center; }
+    .card { background:#c5edef; border-radius:18px; padding:40px; width:380px; max-width:94vw; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,.18); }
+    .logo img { max-width:150px; margin-bottom:12px; border-radius:14px; }
+    h1 { color:#075a5a; margin:10px 0 24px; font-size:1.6rem; font-weight:700; letter-spacing:1px; }
+    a { display:block; margin:14px auto; padding:14px; width:85%; background:#10929e; color:#fff; text-decoration:none; border-radius:8px; font-weight:700; transition:.3s; }
+    a:hover { background:#34495e; }
+    @media(max-width:500px){ .card{width:96vw;padding:20px} }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <!-- Use a real image file; this can be any logo PNG/JPG you place in ./icons/ -->
+      <img src="/main_index/icons/icon-192.png" alt="CHALTE Logo" />
+    </div>
+    <h1>CHALTE</h1>
+    <a href="../driver_web/d_index.html"><i class="fa-solid fa-id-badge"></i> Driver Login</a>
+    <a href="../passenger_web/p_index.html"><i class="fa-solid fa-users"></i> Passenger</a>
+  </div>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/service-worker.js", { scope: "/" })
+      .then(() => console.log("✅ SW registered"))
+      .catch(err => console.error("❌ SW failed:", err));
+  });
+}
+</script>
+  
+</body>
+</html>
